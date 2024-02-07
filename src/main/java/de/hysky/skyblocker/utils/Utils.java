@@ -7,6 +7,7 @@ import de.hysky.skyblocker.skyblock.item.MuseumItemCache;
 import de.hysky.skyblocker.skyblock.item.tooltip.ItemTooltip;
 import de.hysky.skyblocker.skyblock.rift.TheRift;
 import de.hysky.skyblocker.utils.scheduler.MessageScheduler;
+import de.hysky.skyblocker.utils.scheduler.Scheduler;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.fabricmc.fabric.api.client.item.v1.ItemTooltipCallback;
 import net.fabricmc.fabric.api.client.message.v1.ClientReceiveMessageEvents;
@@ -36,6 +37,9 @@ public class Utils {
     private static final Logger LOGGER = LoggerFactory.getLogger(Utils.class);
     private static final String ALTERNATE_HYPIXEL_ADDRESS = System.getProperty("skyblocker.alternateHypixelAddress", "");
     private static final String DUNGEONS_LOCATION = "dungeon";
+    private static final String CRYSTAL_HOLLOWS_LOCATION = "crystal_hollows";
+    private static final String DWARVEN_MINES_LOCATION = "mining_3";
+
     private static final String PROFILE_PREFIX = "Profile: ";
     private static boolean isOnHypixel = false;
     private static boolean isOnSkyblock = false;
@@ -84,6 +88,14 @@ public class Utils {
 
     public static boolean isInDungeons() {
         return getLocationRaw().equals(DUNGEONS_LOCATION) || FabricLoader.getInstance().isDevelopmentEnvironment();
+    }
+
+    public static boolean isInCrystalHollows() {
+        return getLocationRaw().equals(CRYSTAL_HOLLOWS_LOCATION) || FabricLoader.getInstance().isDevelopmentEnvironment();
+    }
+
+    public static boolean isInDwarvenMines() {
+        return getLocationRaw().equals(DWARVEN_MINES_LOCATION) || FabricLoader.getInstance().isDevelopmentEnvironment();
     }
 
     public static boolean isInTheRift() {
@@ -156,10 +168,11 @@ public class Utils {
     }
 
     public static void init() {
-        SkyblockEvents.JOIN.register(Utils::initializeMayorCache);
+        SkyblockEvents.JOIN.register(() -> tickMayorCache(false));
         ClientPlayConnectionEvents.JOIN.register(Utils::onClientWorldJoin);
         ClientReceiveMessageEvents.ALLOW_GAME.register(Utils::onChatMessage);
         ClientReceiveMessageEvents.GAME_CANCELED.register(Utils::onChatMessage); // Somehow this works even though onChatMessage returns a boolean
+        Scheduler.INSTANCE.scheduleCyclic(() -> tickMayorCache(true), 24_000, true); // Update every 20 minutes
     }
 
     /**
@@ -403,8 +416,9 @@ public class Utils {
         map = "";
     }
 
-    private static void initializeMayorCache() {
-        if (!mayor.isEmpty()) return;
+    private static void tickMayorCache(boolean refresh) {
+        if (!mayor.isEmpty() && !refresh) return;
+
         CompletableFuture.supplyAsync(() -> {
             try {
                 JsonObject json = JsonParser.parseString(Http.sendGetRequest("https://api.hypixel.net/v2/resources/skyblock/election")).getAsJsonObject();

@@ -14,6 +14,8 @@ import de.hysky.skyblocker.skyblock.dungeon.puzzle.TicTacToe;
 import de.hysky.skyblocker.skyblock.dungeon.puzzle.waterboard.Waterboard;
 import de.hysky.skyblocker.skyblock.dungeon.secrets.DungeonManager;
 import de.hysky.skyblocker.skyblock.dungeon.secrets.SecretsTracker;
+import de.hysky.skyblocker.skyblock.dwarven.CrystalsHud;
+import de.hysky.skyblocker.skyblock.dwarven.CrystalsLocationsManager;
 import de.hysky.skyblocker.skyblock.dwarven.DwarvenHud;
 import de.hysky.skyblocker.skyblock.end.BeaconHighlighter;
 import de.hysky.skyblocker.skyblock.item.*;
@@ -100,6 +102,8 @@ public class SkyblockerMod implements ClientModInitializer {
         QuickNav.init();
         ItemCooldowns.init();
         DwarvenHud.init();
+        CrystalsHud.init();
+        CrystalsLocationsManager.init();
         ChatMessageListener.init();
         Shortcuts.init();
         DiscordRPCManager.init();
@@ -144,6 +148,8 @@ public class SkyblockerMod implements ClientModInitializer {
         Scheduler.INSTANCE.scheduleCyclic(LividColor::update, 10);
         Scheduler.INSTANCE.scheduleCyclic(BackpackPreview::tick, 50);
         Scheduler.INSTANCE.scheduleCyclic(DwarvenHud::update, 40);
+        Scheduler.INSTANCE.scheduleCyclic(CrystalsHud::update, 40);
+        Scheduler.INSTANCE.scheduleCyclic(CrystalsLocationsManager::update, 40);
         Scheduler.INSTANCE.scheduleCyclic(PlayerListMgr::updateList, 20);
     }
 
