@@ -13,13 +13,11 @@ import org.eclipse.jgit.errors.RepositoryNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
-import java.util.stream.Stream;
 
 /**
  * Initializes the NEU repo, which contains item metadata and fairy souls location data. Clones the repo if it does not exist and checks for updates. Use {@link #runAsyncAfterLoad(Runnable)} to run code after the repo is initialized.
@@ -57,7 +55,8 @@ public class NEURepoManager {
                         LOGGER.info("[Skyblocker] NEU Repository Updated");
                     }
                 } else {
-                    Git.cloneRepository().setURI(REMOTE_REPO_URL).setDirectory(NEURepoManager.LOCAL_REPO_DIR.toFile()).setBranchesToClone(List.of("refs/heads/master")).setBranch("refs/heads/master").call().close();
+                    // TODO branch change
+                    Git.cloneRepository().setURI(REMOTE_REPO_URL).setDirectory(NEURepoManager.LOCAL_REPO_DIR.toFile()).setBranchesToClone(List.of("refs/heads/prerelease")).setBranch("refs/heads/prerelease").call().close();
                     LOGGER.info("[Skyblocker] NEU Repository Downloaded");
                 }
                 NEU_REPO.reload();
@@ -97,7 +96,7 @@ public class NEURepoManager {
                 }
             });
         }
-
+        System.out.println(dir);
         Files.delete(dir);
     }
 

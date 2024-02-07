@@ -1,7 +1,7 @@
-package de.hysky.skyblocker.compatibility.rei;
+package de.hysky.skyblocker.compatibility.rei.crafting;
 
 import de.hysky.skyblocker.skyblock.itemlist.ItemRepository;
-import de.hysky.skyblocker.skyblock.itemlist.SkyblockCraftingRecipe;
+import de.hysky.skyblocker.skyblock.itemlist.recipe.SkyblockCraftingRecipe;
 import de.hysky.skyblocker.utils.ItemUtils;
 import me.shedaniel.rei.api.client.registry.display.DynamicDisplayGenerator;
 import me.shedaniel.rei.api.common.entry.EntryIngredient;

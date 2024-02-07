@@ -2,6 +2,7 @@ package de.hysky.skyblocker;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import de.hysky.skyblocker.compatibility.rei.REIWaypointManager;
 import de.hysky.skyblocker.config.SkyblockerConfigManager;
 import de.hysky.skyblocker.debug.Debug;
 import de.hysky.skyblocker.skyblock.*;
@@ -137,6 +138,7 @@ public class SkyblockerMod implements ClientModInitializer {
         containerSolverManager.init();
         statusBarTracker.init();
         BeaconHighlighter.init();
+        REIWaypointManager.init();
         Scheduler.INSTANCE.scheduleCyclic(Utils::update, 20);
         Scheduler.INSTANCE.scheduleCyclic(DiscordRPCManager::updateDataAndPresence, 200);
         Scheduler.INSTANCE.scheduleCyclic(LividColor::update, 10);

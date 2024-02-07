@@ -1,6 +1,9 @@
 package de.hysky.skyblocker.skyblock.itemlist;
 
 import de.hysky.skyblocker.config.SkyblockerConfigManager;
+import de.hysky.skyblocker.skyblock.itemlist.recipe.RecipeUtil;
+import de.hysky.skyblocker.skyblock.itemlist.recipe.SkyblockCraftingRecipe;
+import de.hysky.skyblocker.skyblock.itemlist.recipe.SkyblockRecipe;
 import de.hysky.skyblocker.utils.Constants;
 import de.hysky.skyblocker.utils.ItemUtils;
 import de.hysky.skyblocker.utils.NEURepoManager;
@@ -27,6 +30,7 @@ public class ItemRepository {
     private static final List<ItemStack> items = new ArrayList<>();
     private static final Map<String, ItemStack> itemsMap = new HashMap<>();
     private static final List<SkyblockCraftingRecipe> recipes = new ArrayList<>();
+    public static final List<SkyblockRecipe> skyblockRecipes = new ArrayList<>();
     private static boolean filesImported = false;
 
     public static void init() {
@@ -61,9 +65,12 @@ public class ItemRepository {
 
     private static void loadRecipes(NEUItem item) {
         for (NEURecipe recipe : item.getRecipes()) {
+            // TODO Compatibility Code to be removed
             if (recipe instanceof NEUCraftingRecipe neuCraftingRecipe) {
                 recipes.add(SkyblockCraftingRecipe.fromNEURecipe(neuCraftingRecipe));
             }
+            SkyblockRecipe skyblockRecipe = RecipeUtil.loadFromNeuRecipe(recipe);
+            if (skyblockRecipe != null) skyblockRecipes.add(skyblockRecipe);
         }
     }
 

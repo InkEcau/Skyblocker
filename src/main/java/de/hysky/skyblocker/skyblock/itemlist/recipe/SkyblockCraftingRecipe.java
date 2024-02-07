@@ -1,16 +1,15 @@
-package de.hysky.skyblocker.skyblock.itemlist;
+package de.hysky.skyblocker.skyblock.itemlist.recipe;
 
 import io.github.moulberry.repo.data.NEUCraftingRecipe;
 import io.github.moulberry.repo.data.NEUIngredient;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class SkyblockCraftingRecipe {
+public class SkyblockCraftingRecipe implements SkyblockRecipe {
     private static final Logger LOGGER = LoggerFactory.getLogger(SkyblockCraftingRecipe.class);
     private final String craftText;
     private final List<ItemStack> grid = new ArrayList<>(9);
@@ -23,22 +22,10 @@ public class SkyblockCraftingRecipe {
     public static SkyblockCraftingRecipe fromNEURecipe(NEUCraftingRecipe neuCraftingRecipe) {
         SkyblockCraftingRecipe recipe = new SkyblockCraftingRecipe(neuCraftingRecipe.getExtraText() != null ? neuCraftingRecipe.getExtraText() : "");
         for (NEUIngredient input : neuCraftingRecipe.getInputs()) {
-            recipe.grid.add(getItemStack(input));
+            recipe.grid.add(RecipeUtil.getItemStack(input));
         }
-        recipe.result = getItemStack(neuCraftingRecipe.getOutput());
+        recipe.result = RecipeUtil.getItemStack(neuCraftingRecipe.getOutput());
         return recipe;
-    }
-
-    private static ItemStack getItemStack(NEUIngredient input) {
-        if (input != NEUIngredient.SENTINEL_EMPTY) {
-            ItemStack stack = ItemRepository.getItemStack(input.getItemId());
-            if (stack != null) {
-                return stack.copyWithCount((int) input.getAmount());
-            } else {
-                LOGGER.warn("[Skyblocker Recipe] Unable to find item {}", input.getItemId());
-            }
-        }
-        return Items.AIR.getDefaultStack();
     }
 
     public List<ItemStack> getGrid() {
@@ -51,5 +38,15 @@ public class SkyblockCraftingRecipe {
 
     public String getCraftText() {
         return craftText;
+    }
+
+    @Override
+    public List<ItemStack> getInput() {
+        return grid;
+    }
+
+    @Override
+    public List<ItemStack> getOutput() {
+        return List.of(result);
     }
 }

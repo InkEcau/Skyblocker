@@ -1,6 +1,7 @@
-package de.hysky.skyblocker.compatibility.rei;
+package de.hysky.skyblocker.compatibility.rei.crafting;
 
 import com.google.common.collect.Lists;
+import de.hysky.skyblocker.compatibility.rei.SkyblockerREIClientPlugin;
 import de.hysky.skyblocker.utils.ItemUtils;
 import me.shedaniel.math.Point;
 import me.shedaniel.math.Rectangle;
@@ -21,10 +22,10 @@ import java.util.List;
 /**
  * Skyblock recipe category class for REI
  */
-public class SkyblockCategory implements DisplayCategory<SkyblockCraftingDisplay> {
+public class SkyblockCraftingCategory implements DisplayCategory<SkyblockCraftingDisplay> {
     @Override
     public CategoryIdentifier<SkyblockCraftingDisplay> getCategoryIdentifier() {
-        return SkyblockerREIClientPlugin.SKYBLOCK;
+        return SkyblockerREIClientPlugin.SKYBLOCK_CRAFTING;
     }
 
     @Override

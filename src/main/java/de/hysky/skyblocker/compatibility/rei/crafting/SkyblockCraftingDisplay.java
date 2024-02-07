@@ -1,6 +1,7 @@
-package de.hysky.skyblocker.compatibility.rei;
+package de.hysky.skyblocker.compatibility.rei.crafting;
 
 
+import de.hysky.skyblocker.compatibility.rei.SkyblockerREIClientPlugin;
 import me.shedaniel.rei.api.common.category.CategoryIdentifier;
 import me.shedaniel.rei.api.common.display.SimpleGridMenuDisplay;
 import me.shedaniel.rei.api.common.display.basic.BasicDisplay;
@@ -35,6 +36,6 @@ public class SkyblockCraftingDisplay extends BasicDisplay implements SimpleGridM
 
     @Override
     public CategoryIdentifier<?> getCategoryIdentifier() {
-        return SkyblockerREIClientPlugin.SKYBLOCK;
+        return SkyblockerREIClientPlugin.SKYBLOCK_CRAFTING;
     }
 }
