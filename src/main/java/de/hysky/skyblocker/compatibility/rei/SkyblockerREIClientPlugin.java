@@ -51,11 +51,11 @@ public class SkyblockerREIClientPlugin implements REIClientPlugin {
         categoryRegistry.add(new SkyblockNpcCategory());
         categoryRegistry.addWorkstations(SKYBLOCK_FORGE, EntryStacks.of(Items.ANVIL));
         categoryRegistry.add(new SkyblockForgeCategory());
-        // TODO NEU repo parser is not fully support this
         categoryRegistry.addWorkstations(SKYBLOCK_KAT, EntryStacks.of(Items.POPPY));
         categoryRegistry.add(new SkyblockKatCategory());
         categoryRegistry.addWorkstations(SKYBLOCK_MOB, EntryStacks.of(Items.DIAMOND_SWORD));
         categoryRegistry.add(new SkyblockMobCategory());
+        // TODO NEU repo parser is not fully support this
         categoryRegistry.addWorkstations(SKYBLOCK_TRADE, EntryStacks.of(Items.EMERALD));
         categoryRegistry.add(new SkyblockTradeCategory());
     }
