@@ -12,6 +12,10 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Simple implementation of a rei widget for slider bar.
+ * The range of "current" is [0,max].
+ */
 public class SliderBar extends BaseWidget<SliderBar> {
 
     private static final Identifier SLIDER_LOCATION = new Identifier(SkyblockerMod.NAMESPACE, "textures/gui/slider.png");

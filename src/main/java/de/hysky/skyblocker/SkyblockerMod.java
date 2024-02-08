@@ -143,6 +143,7 @@ public class SkyblockerMod implements ClientModInitializer {
         statusBarTracker.init();
         BeaconHighlighter.init();
         REIWaypointManager.init();
+        Pet.init();
         Scheduler.INSTANCE.scheduleCyclic(Utils::update, 20);
         Scheduler.INSTANCE.scheduleCyclic(DiscordRPCManager::updateDataAndPresence, 200);
         Scheduler.INSTANCE.scheduleCyclic(LividColor::update, 10);

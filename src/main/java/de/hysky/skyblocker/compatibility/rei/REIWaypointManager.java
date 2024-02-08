@@ -10,6 +10,7 @@ import net.minecraft.util.math.BlockPos;
 
 import java.util.function.Supplier;
 
+// TODO npc waypoint https://github.com/NotEnoughUpdates/RepoParser/issues/1
 public class REIWaypointManager {
     private static final Supplier<Waypoint.Type> TYPE_SUPPLIER = () -> SkyblockerConfigManager.get().general.waypoints.waypointType;
     private static Waypoint currentWaypoint;
@@ -17,7 +18,6 @@ public class REIWaypointManager {
     public static void init() {
         WorldRenderEvents.AFTER_TRANSLUCENT.register(REIWaypointManager::render);
         NEURepoManager.runAsyncAfterLoad(() -> {
-//           NEURepoManager.NEU_REPO.getItems().getItems().values().stream().filter()
         });
     }
 
