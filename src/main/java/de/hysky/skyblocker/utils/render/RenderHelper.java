@@ -12,9 +12,16 @@ import net.fabricmc.fabric.api.client.rendering.v1.WorldRenderEvents;
 import net.fabricmc.fabric.api.event.Event;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.font.TextRenderer;
+import net.minecraft.client.gui.DrawContext;
+import net.minecraft.client.gui.screen.ingame.InventoryScreen;
 import net.minecraft.client.render.*;
 import net.minecraft.client.render.VertexFormat.DrawMode;
 import net.minecraft.client.util.math.MatrixStack;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.boss.WitherEntity;
+import net.minecraft.entity.boss.dragon.EnderDragonEntity;
+import net.minecraft.entity.mob.*;
+import net.minecraft.entity.passive.IronGolemEntity;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.text.OrderedText;
 import net.minecraft.text.Text;
@@ -24,6 +31,7 @@ import net.minecraft.util.math.Box;
 import net.minecraft.util.math.Vec3d;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
+import org.joml.Quaternionf;
 import org.joml.Vector3f;
 import org.lwjgl.opengl.GL11;
 import org.slf4j.Logger;
@@ -333,5 +341,65 @@ public class RenderHelper {
         }
 
         return null;
+    }
+
+    /**
+     * Drawing entities without scissors.
+     *
+     * @param context context
+     * @param x1 left top x
+     * @param y1 left top y
+     * @param x2 right bottom x
+     * @param y2 right bottom y
+     * @param size scale
+     * @param f y offset
+     * @param mouseX affects the entity's yaw
+     * @param mouseY affects the entity's pitch
+     * @param entity entity to be rendered
+     * @see RenderHelper#getFittingScale(LivingEntity) getFittingScale(LivingEntity entity) to get a fitting size of the entity
+     * @see net.minecraft.client.gui.screen.ingame.InventoryScreen#drawEntity(DrawContext, int, int, int, int, int, float, float, float, LivingEntity)
+     */
+    public static void drawEntity(DrawContext context, int x1, int y1, int x2, int y2, int size, float f, float mouseX, float mouseY, LivingEntity entity) {
+        float g = (float)(x1 + x2) / 2.0F;
+        float h = (float)(y1 + y2) / 2.0F;
+        float i = (float)Math.atan((g - mouseX) / 40.0F);
+        float j = (float)Math.atan((h - mouseY) / 40.0F);
+        Quaternionf quaternionf = (new Quaternionf()).rotateZ(3.1415927F);
+        Quaternionf quaternionf2 = (new Quaternionf()).rotateX(j * 20.0F * 0.017453292F);
+        quaternionf.mul(quaternionf2);
+        float k = entity.bodyYaw;
+        float l = entity.getYaw();
+        float m = entity.getPitch();
+        float n = entity.prevHeadYaw;
+        float o = entity.headYaw;
+        entity.bodyYaw = 180.0F + i * 20.0F;
+        entity.setYaw(180.0F + i * 40.0F);
+        entity.setPitch(-j * 20.0F);
+        entity.headYaw = entity.getYaw();
+        entity.prevHeadYaw = entity.getYaw();
+        Vector3f vector3f = new Vector3f(0.0F, entity.getHeight() / 2.0F + f, 0.0F);
+        InventoryScreen.drawEntity(context, g, h, size, vector3f, quaternionf, quaternionf2, entity);
+        entity.bodyYaw = k;
+        entity.setYaw(l);
+        entity.setPitch(m);
+        entity.prevHeadYaw = n;
+        entity.headYaw = o;
+    }
+
+    /**
+     * Get fitting scale of an entity.
+     * It may be necessary to multiply the resulting value by a fixed ratio.
+     *
+     * @param entity entity
+     * @return scale
+     * @see RenderHelper#drawEntity(DrawContext, int, int, int, int, int, float, float, float, LivingEntity)
+     */
+    public static int getFittingScale(LivingEntity entity) {
+        if (entity instanceof GiantEntity || entity instanceof EnderDragonEntity || entity instanceof GhastEntity) return 5;
+        else if (entity instanceof WitherEntity) return 18;
+        else if (entity instanceof WitherSkeletonEntity || entity instanceof EndermanEntity || entity instanceof IronGolemEntity) return 22;
+        else if (entity instanceof SilverfishEntity || entity instanceof EndermiteEntity) return 45;
+        else if (entity instanceof SlimeEntity) return 60;
+        else return 30;
     }
 }

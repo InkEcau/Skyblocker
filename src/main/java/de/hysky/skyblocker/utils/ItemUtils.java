@@ -7,9 +7,7 @@ import de.hysky.skyblocker.mixin.accessor.ItemStackAccessor;
 import it.unimi.dsi.fastutil.ints.IntIntPair;
 import net.fabricmc.fabric.api.client.command.v2.FabricClientCommandSource;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NbtCompound;
-import net.minecraft.nbt.NbtElement;
-import net.minecraft.nbt.StringNbtReader;
+import net.minecraft.nbt.*;
 import net.minecraft.text.Text;
 import net.minecraft.text.Texts;
 import net.minecraft.util.Formatting;
@@ -194,6 +192,25 @@ public class ItemUtils {
         }
 
         return displayNbt.getList("Lore", NbtElement.STRING_TYPE).stream().map(NbtElement::asString).map(Text.Serialization::fromJson).filter(Objects::nonNull).map(text -> Texts.setStyleIfAbsent(text, ItemStackAccessor.getLORE_STYLE())).map(Text.class::cast).toList();
+    }
+
+    /**
+     * Add text to an item's Lore tag.
+     * @param item item
+     * @param text text
+     * @return the same item
+     */
+    public static ItemStack appendLore(ItemStack item, Text text) {
+        NbtCompound displayNbt = item.getOrCreateSubNbt("display");
+        NbtList loreNbt;
+        if (displayNbt.contains("Lore", NbtElement.LIST_TYPE)) {
+            loreNbt = displayNbt.getList("Lore", NbtElement.STRING_TYPE);
+        } else {
+            loreNbt = new NbtList();
+            displayNbt.put("Lore", loreNbt);
+        }
+        loreNbt.add(NbtString.of(Text.Serialization.toJsonString(text)));
+        return item;
     }
 
     public static ItemStack getSkyblockerStack() {
